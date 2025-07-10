@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Emprestimo;
 use App\Models\User;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreBookRequest;
@@ -18,6 +19,7 @@ class LivroController extends Controller
     {
         $livros = Livro::all();
         $user = Auth::user();
+        $isAdmin = $user->isAdm();
         $livrosCurtidosIds = $user->livrosCurtidos()->pluck('livro_id')->toArray();
 
         $emprestimosAtivos = $user->emprestimos()->whereNull('dt_devolucao')->with('livros')->get();
@@ -26,7 +28,7 @@ class LivroController extends Controller
             return $emprestimo->livros->pluck('id');
         })->unique()->toArray();
 
-        return view("admin.books.index", compact('livros', 'livrosReservadosIds', 'livrosCurtidosIds'));
+        return view("admin.books.index", compact('livros', 'livrosReservadosIds', 'livrosCurtidosIds', 'isAdmin'));
     }
 
 
@@ -57,7 +59,9 @@ class LivroController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $livro = Livro::findOrFail($id);
+        $categoria = $livro->categorias()->first();
+        return view('admin.books.show', compact('livro', 'categoria'));
     }
 
     /**
@@ -79,9 +83,27 @@ class LivroController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function delete(string $id)
     {
-        //
+        $emprestimosAtivos = Emprestimo::whereNull('dt_devolucao')
+    ->whereHas('livros', function($query) use ($id) {
+        $query->where('livro_id', $id);
+    })
+    ->first();
+
+    if ($emprestimosAtivos) {
+        return response()->json([
+            'success'=> false,
+            'message' => "Erro! O livro possui emprestimos ativos"
+        ]);
+    }
+        $livro = Livro::findOrFail($id);
+        $livro->categorias()->detach();
+        $livro->delete();
+        return response()->json([
+            "success"=> true,
+            "message"=> "Livro deletado com sucesso!"
+        ]);
     }
 
     public function curtir($livroId)

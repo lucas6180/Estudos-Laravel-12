@@ -1,9 +1,14 @@
-const btnOk = document.querySelectorAll('.botao-ok');
-const campoAlerta = document.querySelectorAll('.campo-alerta');
-campoAlerta.forEach(alerta => {
-    btnOk.forEach(button =>{
-        button.addEventListener('click', ()=>{
-            alerta.style.display = 'none';
-        });
+
+
+export function exibirAlerta(mensagem) {
+    const campoAlerta = document.querySelector(".campo-alerta");
+    const aviso = campoAlerta.querySelector(".conteudo-aviso p");
+    aviso.innerText = mensagem;
+    campoAlerta.style.display = "flex";
+
+    const btnOk = campoAlerta.querySelector(".botao-ok");
+    btnOk.addEventListener("click", () => {
+        campoAlerta.style.display = "none";
     });
-});
+   
+}

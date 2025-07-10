@@ -3,27 +3,14 @@
 @section('title', 'Index')
 @section('content')
 
-    <section class="flex p-4 gap-6 flex-col w-full h-full">
-        <div class="campo-alerta absolute  w-full h-[350px] flex justify-center items-center backdrop-blur-sm bg-slate-950 bg-opacity-20">
-            <div class="erros relative bg-slate-700 w-[350px] h-[180px] flex flex-col items-center p-4 rounded-sm shadow-lg">
-                <div class="aviso w-full h-[35px] flex gap-2 items-center">
-                    <img class="w-[25px]" src="{{ asset('images/icon-alerta.png') }}" alt="">
-                    <p class="font-medium text-white">Aviso</p>
-                </div>
-                <div class="conteudo-aviso w-full h-[95px] flex items-center justify-center p-2">
-                    <p class="font-medium"></p>
-                </div>
-                <div class="w-full h-[45px] flex items-center justify-center">
-                    <button  class="botao-ok bg-red-500 hover:bg-red-600 w-[80px] h-[35px] rounded-sm">Ok</button>
-                </div>
-            </div>
-        </div>
-        <div class="cards flex">
+    <section class="flex p-4 gap-6 flex-col w-full h-full  ">
+       <x-alert/>
+        <div class="cards flex flex-wrap items-center gap-y-16">
             @foreach ($livros as $livro)
                 <div class="w-[280px] h-[350px] flex flex-col items-center justify-center gap-3">
                     <img id="imgLivro" class="w-[200px] h-[240px] border-2 border-white" src="{{ $livro->imagem }}"
                         alt="">
-                    <div id="tituloLivro">{{ $livro->titulo }}</div>
+                    <div id="tituloLivro" class="w-[200px] h-[60px] flex justify-center text-center font-medium items-center">{{ $livro->titulo }}</div>
                     <div class="flex gap-1">
                         @if (in_array($livro->id, $livrosReservadosIds))
                             <button data-livro-id="{{ $livro->id }}"

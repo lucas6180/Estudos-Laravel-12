@@ -14,20 +14,20 @@ class LivroController extends Controller
     /**
      * Display a listing of the resource.
      */
-   public function index()
-{
-    $livros = Livro::all();
-    $user = Auth::user();
-    $livrosCurtidosIds = $user->livrosCurtidos()->pluck('livro_id')->toArray();
+    public function index()
+    {
+        $livros = Livro::all();
+        $user = Auth::user();
+        $livrosCurtidosIds = $user->livrosCurtidos()->pluck('livro_id')->toArray();
 
-    $emprestimosAtivos = $user->emprestimos()->whereNull('dt_devolucao')->with('livros')->get();
+        $emprestimosAtivos = $user->emprestimos()->whereNull('dt_devolucao')->with('livros')->get();
 
-    $livrosReservadosIds = $emprestimosAtivos->flatMap(function($emprestimo) {
-        return $emprestimo->livros->pluck('id');
-    })->unique()->toArray();
+        $livrosReservadosIds = $emprestimosAtivos->flatMap(function ($emprestimo) {
+            return $emprestimo->livros->pluck('id');
+        })->unique()->toArray();
 
-    return view("admin.books.index", compact('livros', 'livrosReservadosIds', 'livrosCurtidosIds'));
-}
+        return view("admin.books.index", compact('livros', 'livrosReservadosIds', 'livrosCurtidosIds'));
+    }
 
 
     /**
@@ -43,9 +43,14 @@ class LivroController extends Controller
      */
     public function store(StoreBookRequest $request)
     {
-        Livro::create($request->validated());
-        return redirect()->route('home');
+        $livro = Livro::create($request->validated());
+
+        return response()->json([
+            'success' => (bool) $livro,
+            'message' => $livro ? 'Livro cadastrado com sucesso!' : 'Erro ao cadastrar livro.',
+        ], $livro ? 200 : 500);
     }
+
 
     /**
      * Display the specified resource.

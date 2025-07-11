@@ -18,12 +18,14 @@ Route::middleware('auth')->prefix('admin')
         Route::get('/users', [UserController::class, 'index'])->name('users.index');
         Route::post('/books/store', [LivroController::class, 'store'])->name('book.store');
         Route::get('/books/create', [LivroController::class, 'create'])->name('book.create');
+        Route::delete('/books/delete/{livro}', [LivroController::class, 'delete'])->name('book.delete');
     });
 Route::middleware('auth')->prefix('books')->group(function () {
     Route::get('/index', [LivroController::class, 'index'])->name('books.index');
     Route::post('/cancelar/{livro}', [EmprestimoController::class, 'cancelarReservar'])->name('books.cancelar');
     Route::post('/reservar/{livro}', [EmprestimoController::class, 'reservar'])->name('books.reservar');
     Route::post('/curtir/{livro}', [LivroController::class, 'curtir'])->name('books.curtir');
+    Route::get('/{livro}', [LivroController::class, 'show'])->name('books.show');
 });
 Route::get('/', function () {
     return view('welcome');

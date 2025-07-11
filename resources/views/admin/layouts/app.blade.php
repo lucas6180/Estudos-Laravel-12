@@ -1,6 +1,6 @@
 {{-- app.blade.php --}}
 <!DOCTYPE html>
-<html lang="en" style="box-sizing: border-box">
+<html lang="pt-br" style="box-sizing: border-box">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">

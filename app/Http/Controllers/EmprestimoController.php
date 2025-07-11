@@ -29,7 +29,6 @@ class EmprestimoController extends Controller
                 ->first();
 
             if ($emprestimo) {
-                // Cancelar reserva
                 $emprestimo->livros()->detach($livroId);
 
                 if ($emprestimo->livros()->count() === 0) {

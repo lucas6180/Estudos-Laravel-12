@@ -1,7 +1,7 @@
+@csrf()
+<div class=" flex flex-col gap-4 w-[screen] h-[950px] justify-center items-center">
+    
     <x-alert></x-alert>
-    @csrf()
-    <div class=" flex flex-col gap-4 w-[screen] h-[950px] justify-center items-center">
-
         <div>
             <h1 class="text-2xl font-medium text-white">
                 @yield('form--title', 'Cadastrar')
@@ -31,19 +31,11 @@
         <input required class="hidden" type="text" id="enderecoImg" name="imagem">
         <div class="flex justify-center flex-col w-4/6 gap-1">
             <label for="categoria" class="font-medium">Categoria</label>
-            <select name="categoria" id="categoria" class="bg-slate-900 rounded-sm border-0 h-[48px] text-white">
+            <select name="categoria_id" id="categoria" class="bg-slate-900 rounded-sm border-0 h-[48px] text-white">
                 <option value="" disabled selected>Selecione a categoria</option>
-                <option value="Ficção Científica">Ficção Científica</option>
-                <option value="Fantasia">Fantasia</option>
-                <option value="Romance">Romance</option>
-                <option value="Terror">Terror</option>
-                <option value="Mistério">Mistério</option>
-                <option value="Aventura">Aventura</option>
-                <option value="Biografia">Biografia</option>
-                <option value="Infantil">Infantil</option>
-                <option value="Autoajuda">Autoajuda</option>
-                <option value="Drama">Drama</option>
-                <option value="Clássicos">Clássicos</option>
+                @foreach($categorias as $categoria)
+                <option value="{{ $categoria->id }}">{{ $categoria->tipo }}</option>
+                @endforeach
             </select>
 
         </div>

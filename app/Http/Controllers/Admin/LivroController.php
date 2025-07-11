@@ -6,6 +6,7 @@ use App\Models\Emprestimo;
 use App\Models\User;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreBookRequest;
+use App\Models\Categoria;
 use App\Models\Livro;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -37,7 +38,8 @@ class LivroController extends Controller
      */
     public function create()
     {
-        return view("admin.books.create");
+        $categorias = Categoria::all();
+        return view("admin.books.create", compact('categorias'));
     }
 
     /**
@@ -46,6 +48,10 @@ class LivroController extends Controller
     public function store(StoreBookRequest $request)
     {
         $livro = Livro::create($request->validated());
+
+        if ($request->has('categoria_id')) {
+            $livro->categorias()->attach($request->categoria_id);
+        }
 
         return response()->json([
             'success' => (bool) $livro,
@@ -86,23 +92,23 @@ class LivroController extends Controller
     public function delete(string $id)
     {
         $emprestimosAtivos = Emprestimo::whereNull('dt_devolucao')
-    ->whereHas('livros', function($query) use ($id) {
-        $query->where('livro_id', $id);
-    })
-    ->first();
+            ->whereHas('livros', function ($query) use ($id) {
+                $query->where('livro_id', $id);
+            })
+            ->first();
 
-    if ($emprestimosAtivos) {
-        return response()->json([
-            'success'=> false,
-            'message' => "Erro! O livro possui emprestimos ativos"
-        ]);
-    }
+        if ($emprestimosAtivos) {
+            return response()->json([
+                'success' => false,
+                'message' => "Erro! O livro possui emprestimos ativos"
+            ]);
+        }
         $livro = Livro::findOrFail($id);
         $livro->categorias()->detach();
         $livro->delete();
         return response()->json([
-            "success"=> true,
-            "message"=> "Livro deletado com sucesso!"
+            "success" => true,
+            "message" => "Livro deletado com sucesso!"
         ]);
     }
 

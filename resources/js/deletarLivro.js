@@ -18,6 +18,12 @@ botaodeletar.forEach((button) => {
             const result = await response.json();
             if (result.success) {
                 exibirAlerta(result.message);
+                const botaoOkAlerta = document.querySelectorAll('.botao-ok');
+                botaoOkAlerta.forEach((botao) => {
+                    botao.addEventListener('click', () => {
+                        window.location.reload();
+                    });
+                })
             } else {
                 exibirAlerta(result.message);
             }

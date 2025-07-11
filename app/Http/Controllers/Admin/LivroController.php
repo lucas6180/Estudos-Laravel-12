@@ -38,8 +38,9 @@ class LivroController extends Controller
      */
     public function create()
     {
+        $livro = false;
         $categorias = Categoria::all();
-        return view("admin.books.create", compact('categorias'));
+        return view("admin.books.create", compact('categorias', 'livro'));
     }
 
     /**
@@ -75,7 +76,9 @@ class LivroController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $livro = Livro::findOrFail($id);
+        $categorias = Categoria::all();
+        return view('admin.books.edit', compact('livro', 'categorias'));
     }
 
     /**

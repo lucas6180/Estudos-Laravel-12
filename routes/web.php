@@ -16,6 +16,7 @@ Route::middleware('auth')->prefix('admin')
         Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
         Route::post('/users/', [UserController::class, 'store'])->name('users.store');
         Route::get('/users', [UserController::class, 'index'])->name('users.index');
+        Route::get('/books/edit/{livro}', [LivroController::class, 'edit'])->name('book.edit');
         Route::post('/books/store', [LivroController::class, 'store'])->name('book.store');
         Route::get('/books/create', [LivroController::class, 'create'])->name('book.create');
         Route::delete('/books/delete/{livro}', [LivroController::class, 'delete'])->name('book.delete');

@@ -7,7 +7,9 @@
 
     {{-- @include('admin.includes.alerts.errors') --}}
     <x-alert></x-alert>
-      <form action="{{ route('users.store') }}" method="POST">
-          @include('admin.users.partials.form')
-      </form>
+      <section class="s-screen flex justify-center">
+          <form action="{{ route('users.store') }}" class="w-[600px]" method="POST">
+              @include('admin.users.partials.form')
+          </form>
+      </section>
 @endsection

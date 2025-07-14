@@ -49,3 +49,4 @@
 @vite('resources/js/verLivro.js')
 @vite('resources/js/deletarLivro.js')
 @vite('resources/js/editarLivro.js')
+@vite('resources/js/mostrarSenha.js')
